@@ -68,9 +68,9 @@
         SELECT accountId, accountUserId, accountUserNm, accountEmail, accountPassword, devCheck, active, role, createDt,
         updateDt
         FROM bbs_new_account
-        <where>
-            <if test=" accountUserId != null and accountUserId != '' ">AND accountUserId = #{accountUserId}</if>
-        </where>
+<!--        <where>-->
+<!--            <if test=" accountUserId != null and accountUserId != '' ">AND accountUserId = #{accountUserId}</if>-->
+<!--        </where>-->
     </select>
 
 </mapper>

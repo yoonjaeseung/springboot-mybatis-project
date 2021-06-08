@@ -7,7 +7,10 @@ import com.spring.springbootmybatisproject.common.model.ResultVO;
 import com.spring.springbootmybatisproject.security.model.domain.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -84,7 +88,7 @@ public class NAccountController {
     @PostMapping("/loginProc")
     @ResponseBody
     public ResultVO accountLogin(@Valid NAccountVO nAccountVO, BindingResult bindingResult, Model model,
-                                 HttpServletRequest req) throws Exception {
+                                 HttpServletRequest req, Authentication authentication, Principal principal) throws Exception {
         ResultVO result = new ResultVO();
         String accountUserId = nAccountVO.getAccountUserId();
         String accountPassword = nAccountVO.getAccountPassword();
@@ -105,15 +109,47 @@ public class NAccountController {
                 if (dbAccountUserId != null && dbAccountPassword != null) {
 
 //                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//                    UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal()
-                    UserPrincipal auth = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//                    UserPrincipal userPrincipal = auth.getPrincipal();
+                    if (principal != null) {
+                        System.out.println("타입정보 : " + principal.getClass());
+                        System.out.println("ID정보 : " + principal.getName());
+                    }
 
-                    System.out.println(auth.getName());
+
+                    if (authentication != null) {
+                        System.out.println("타입정보 : " + authentication.getClass());
+
+                        // 세션 정보 객체 반환
+                        WebAuthenticationDetails web = (WebAuthenticationDetails)authentication.getDetails();
+                        System.out.println("세션ID : " + web.getSessionId());
+                        System.out.println("접속IP : " + web.getRemoteAddress());
+
+                        // UsernamePasswordAuthenticationToken에 넣었던 UserDetails 객체 반환
+                        UserDetails userVO = (UserDetails) authentication.getPrincipal();
+                        System.out.println("ID정보 : " + userVO.getUsername());
+                    }
+
+
+                    Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//                    UserDetails userDetails = (UserDetails) userPrincipal;
+
+                    String username = ((UserDetails) userPrincipal).getUsername();
+                    String password = ((UserDetails) userPrincipal).getPassword();
+
+                    log.info("name: {}, pass: {}", username, password);
+
+                    if(userPrincipal instanceof UserPrincipal){
+                        String userName = ((UserPrincipal)userPrincipal).getUsername();
+                        System.out.println("true: "+userName);
+                    }else{
+                        String userName = userPrincipal.toString();
+                        System.out.println("false: "+userName);
+                    }
+
 
                     HttpSession session = req.getSession(true); // 세션을 가져오기(없으면 생성한다)
                     session.setAttribute("account", loginAccount); //세션 등록
                     model.addAttribute("account", loginAccount);
-
 
 
                     result.setResCode(SFV.INT_RES_CODE_A_LOGIN_SUCCESS);

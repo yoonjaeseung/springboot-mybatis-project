@@ -14,10 +14,10 @@ import java.util.Collection;
 
 public class UserPrincipal implements UserDetails {
 
-    private NAccountVO user;
+    private NAccountVO nAccountVO;
 
-    public UserPrincipal(NAccountVO user) {
-        this.user = user;
+    public UserPrincipal(NAccountVO nAccountVO) {
+        this.nAccountVO = nAccountVO;
     }
 
     @Override
@@ -28,13 +28,13 @@ public class UserPrincipal implements UserDetails {
     @Override
     public String getPassword() {
 //        return user.getPassword();
-        return user.getAccountPassword();
+        return nAccountVO.getAccountPassword();
     }
 
     @Override
     public String getUsername() {
 //        return user.getUserName();
-        return user.getAccountUserNm();
+        return nAccountVO.getAccountUserNm();
     }
 
     @Override
@@ -54,16 +54,16 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getActive() == 1;
+        return nAccountVO.getActive() == 1;
     }
 
     public String getId() {
 //        return user.getLoginId();
-        return user.getAccountUserId();
+        return nAccountVO.getAccountUserId();
     }
 
     public String getName() {
 //        return user.getUserName();
-        return user.getAccountUserNm();
+        return nAccountVO.getAccountUserNm();
     }
 }

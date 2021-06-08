@@ -7,9 +7,9 @@ import org.apache.ibatis.type.Alias;
  * Created by berno579@gmail.com on 2021/05/24
  * Github : http://github.com/bee0113
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@ToString
 @Getter
 @Setter
 @Alias("NAccountVO") // mapper에서 객체 경로를 단축하여 사용하기 위함
