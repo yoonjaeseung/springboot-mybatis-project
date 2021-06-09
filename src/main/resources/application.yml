@@ -1,8 +1,8 @@
 spring:
-  mvc:
-    view:
-      prefix: /views/
-      suffix: .jsp
+#  mvc:
+#    view:
+#      prefix: /views/
+#      suffix: .jsp
 
   devtools:
     livereload:
