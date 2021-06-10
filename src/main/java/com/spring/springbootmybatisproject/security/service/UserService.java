@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
         return new UserPrincipal2(user);
     }
 
-    public User findUser(User user) {
-        return userMapper.findUser(user);
+    public void findUser(User user) {
+        userMapper.findUser(user);
     }
 }

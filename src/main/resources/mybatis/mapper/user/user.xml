@@ -11,7 +11,7 @@
     </resultMap>
 
 
-    <select id="findUser" resultMap="User">
+    <select id="findUser" parameterType="User" resultMap="User">
         SELECT  user_id, active, login_id, user_name, password
         FROM user
         WHERE login_id = #{loginId};

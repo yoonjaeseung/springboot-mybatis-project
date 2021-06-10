@@ -42,18 +42,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
-                    .antMatchers("/slogin", "/sloginProc").permitAll()
+                    .antMatchers("/slogin").permitAll()
                     .antMatchers("/registration").permitAll()
                     .antMatchers("/home").hasAuthority("USER") // ADMIN 권한의 유저만 /home 에 접근가능
+//                    .antMatchers("/home").permitAll() // ADMIN 권한의 유저만 /home 에 접근가능
                     .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()
                     .loginPage("/slogin")
+                    .loginProcessingUrl("sloginProc")
                     .failureUrl("/slogin?error=true")
 //                    .defaultSuccessUrl("/home")
                     .usernameParameter("loginId")
                     .passwordParameter("password")
+                    .successHandler(new CustomLoginSuccessHandler())
                 .and()
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

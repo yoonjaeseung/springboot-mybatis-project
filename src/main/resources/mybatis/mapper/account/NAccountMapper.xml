@@ -42,7 +42,16 @@
     <!-- 계정 로그인 -->
     <select id="findByAccount" parameterType="NAccountVO" resultType="NAccountVO">
         <![CDATA[
-        SELECT accountId, accountUserId, accountUserNm, accountEmail, accountPassword, devCheck, active, role, createDt, updateDt
+        SELECT accountId
+             , accountUserId
+             , accountUserNm
+             , accountEmail
+             , accountPassword
+             , devCheck
+             , active
+             , role
+             , createDt
+             , updateDt
         FROM bbs_new_account
         ]]>
         <where>

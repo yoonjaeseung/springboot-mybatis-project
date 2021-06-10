@@ -1,19 +1,16 @@
 package com.spring.springbootmybatisproject.security.controller;
 
-import com.spring.springbootmybatisproject.security.model.domain.UserPrincipal2;
 import com.spring.springbootmybatisproject.security.model.entity.User;
 import com.spring.springbootmybatisproject.security.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Slf4j
@@ -26,26 +23,25 @@ public class UserController {
     @GetMapping(value = {"/", "/slogin"})
     public ModelAndView getLoginPage() {
         ModelAndView mv = new ModelAndView();
+
+
         mv.setViewName("user/login");
         return mv;
     }
 
-    @PostMapping("sloginProc")
-    public ModelAndView findLoginInfo(User user) {
-        ModelAndView mv = new ModelAndView();
+    @PostMapping("/sloginProc")
+    public void findLoginInfo(User user, HttpServletResponse response) {
+//        ModelAndView mv = new ModelAndView();
+//        User userInfo = userService.findUser(user);
+//        mv.addObject("user", userInfo);
+//        mv.setViewName("user/home");
 
-        User userInfo = userService.findUser(user);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserPrincipal2 userPrincipal2 = (UserPrincipal2) auth.getPrincipal();
-        mv.addObject("userName", "Welcome " + userPrincipal2.getName() + " (" + userPrincipal2.getId() + ")");
-        mv.addObject("user", userInfo);
-        mv.setViewName("user/home");
+        userService.findUser(user);
         System.out.println("login complete");
 
-        return mv;
     }
 
-    @GetMapping("registration")
+    @GetMapping("/registration")
     public ModelAndView getRegistrationPage() {
         ModelAndView mv = new ModelAndView();
         User user = new User();
@@ -54,7 +50,7 @@ public class UserController {
         return mv;
     }
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
         ModelAndView mv = new ModelAndView();
         User userExists = userService.findUserByLoginId(user.getLoginId());
@@ -73,38 +69,38 @@ public class UserController {
         return mv;
     }
 
-    @GetMapping("home")
+    @GetMapping("/home")
     public ModelAndView home() {
         ModelAndView mv = new ModelAndView();
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        UserPrincipal2 userPrincipal2 = (UserPrincipal2) auth.getPrincipal();
 
 
-        Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //                    UserDetails userDetails = (UserDetails) userPrincipal;
 
-        String username = ((UserDetails) userPrincipal).getUsername();
-        String password = ((UserDetails) userPrincipal).getPassword();
+//        String username = ((UserDetails) userPrincipal2).getUsername();
+//        String password = ((UserDetails) userPrincipal2).getPassword();
+//
+//        log.info("name: {}, pass: {}", username, password);
 
-        log.info("name: {}, pass: {}", username, password);
-
-        if (userPrincipal instanceof UserPrincipal2) {
-            String userName = ((UserPrincipal2) userPrincipal).getUsername();
-            System.out.println("true: " + userName);
-        } else {
-            String userName = userPrincipal.toString();
-            System.out.println("false: " + userName);
-        }
+//        if (userPrincipal instanceof UserPrincipal2) {
+//            String userName = ((UserPrincipal2) userPrincipal).getUsername();
+//            System.out.println("true: " + userName);
+//        } else {
+//            String userName = userPrincipal.toString();
+//            System.out.println("false: " + userName);
+//        }
 
 
 //        System.out.println(userPrincipal2.toString());
 //        mv.addObject("userName", "Welcome " + userPrincipal2.getName() + " (" + userPrincipal2.getId() + ")");
-//        mv.addObject("adminMessage", "Content Available Only for Users with Admin Role");
+        mv.addObject("adminMessage", "Content Available Only for Users with Admin Role");
         mv.setViewName("user/home");
         return mv;
     }
 
-    @GetMapping("exception")
+    @GetMapping("/exception")
     public ModelAndView getUserPermissionExceptionPage() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/access-denied");

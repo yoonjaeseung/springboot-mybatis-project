@@ -11,5 +11,5 @@ public interface UserMapper {
     User findUserByLoginId(@Param("loginId") String loginId);
     int setUserInfo(@Param("param") User param);
 
-    User findUser(User user);
+    void findUser(User user);
 }
