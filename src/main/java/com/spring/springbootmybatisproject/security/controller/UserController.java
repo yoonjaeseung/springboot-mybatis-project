@@ -1,16 +1,22 @@
 package com.spring.springbootmybatisproject.security.controller;
 
+import com.spring.springbootmybatisproject.security.model.domain.UserPrincipal2;
 import com.spring.springbootmybatisproject.security.model.entity.User;
 import com.spring.springbootmybatisproject.security.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Slf4j
@@ -20,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = {"/", "/slogin"})
+    @GetMapping(value = {"/","/slogin"})
     public ModelAndView getLoginPage() {
         ModelAndView mv = new ModelAndView();
 
@@ -70,19 +76,19 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public ModelAndView home() {
+    public ModelAndView home(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView();
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        UserPrincipal2 userPrincipal2 = (UserPrincipal2) auth.getPrincipal();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal2 userPrincipal2 = (UserPrincipal2) auth.getPrincipal();
 
 
 //        Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //                    UserDetails userDetails = (UserDetails) userPrincipal;
 
-//        String username = ((UserDetails) userPrincipal2).getUsername();
-//        String password = ((UserDetails) userPrincipal2).getPassword();
+        String username = ((UserDetails) userPrincipal2).getUsername();
+        String password = ((UserDetails) userPrincipal2).getPassword();
 //
-//        log.info("name: {}, pass: {}", username, password);
+        log.info("name: {}, pass: {}", username, password);
 
 //        if (userPrincipal instanceof UserPrincipal2) {
 //            String userName = ((UserPrincipal2) userPrincipal).getUsername();
@@ -92,9 +98,12 @@ public class UserController {
 //            System.out.println("false: " + userName);
 //        }
 
+        HttpSession session = request.getSession(true);
+        session.setAttribute("sessionTest", userPrincipal2);
+        mv.addObject("principal", userPrincipal2.getAuthorities());
 
-//        System.out.println(userPrincipal2.toString());
-//        mv.addObject("userName", "Welcome " + userPrincipal2.getName() + " (" + userPrincipal2.getId() + ")");
+        System.out.println(userPrincipal2.toString());
+        mv.addObject("userName", "Welcome " + userPrincipal2.getName() + " (" + userPrincipal2.getId() + ")");
         mv.addObject("adminMessage", "Content Available Only for Users with Admin Role");
         mv.setViewName("user/home");
         return mv;

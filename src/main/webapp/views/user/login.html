@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title>WS Product Management System</title>
     <link rel="icon" th:href="@{/images/spring_icon.png}">
@@ -33,6 +35,12 @@
         <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit"
                 th:text="Login"></button>
     </form>
+
+    <a sec:authorize="isAnonymous()" th:href="@{/slogin}">로그인</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+    <a sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+    <a sec:authorize="hasRole('USER')" th:href="@{/info}">내정보</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">어드민</a>
 </div>
 </body>
 </html>

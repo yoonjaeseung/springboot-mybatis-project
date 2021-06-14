@@ -59,7 +59,7 @@ dependencies {
 
     //thymeleaf -spring security sample 진행 시 사용했음(진행 안하면 비활성)
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5' // thymeleaf sec tag
 
     //embed Tomcat Starter
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'

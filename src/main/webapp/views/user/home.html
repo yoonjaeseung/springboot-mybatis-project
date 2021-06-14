@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head><title>Admin Page</title>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Admin Page</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -13,11 +15,20 @@
     </form>
     <div class="panel-group" style="margin-top:40px">
         <div class="panel panel-primary">
-<!--            <div class="panel-heading"><span th:utext="${userName}"></span></div>-->
+            <div class="panel-heading"><span th:utext="${userName}"></span></div>
             <div class="panel-body"><img th:src="@{/images/welcome.png}" class="img-responsive center-block"
                                          width="400"
                                          height="400" alt="Beer"/></div>
             <p class="admin-message-text text-center" th:utext="${adminMessage}"></p></div>
+        <div>
+            <div th:each="auth: ${principal}">
+                <span th:text="${auth =='ADMIN'}"></span>
+            </div>
+            <a sec:authorize="isAuthenticated()">인증된 회원만 보임</a>
+            <a sec:authorize="hasRole('USER')">USER 회원만 보임</a>
+            <a sec:authorize="hasRole('ADMIN')">ADMIN 회원만 보임</a>
+        </div>
+
     </div>
 </div>
 </body>

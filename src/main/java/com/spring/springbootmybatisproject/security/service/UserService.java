@@ -46,8 +46,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.findUserByLoginId(username);
+    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+        User user = userMapper.findUserByLoginId(loginId);
         return new UserPrincipal2(user);
     }
 

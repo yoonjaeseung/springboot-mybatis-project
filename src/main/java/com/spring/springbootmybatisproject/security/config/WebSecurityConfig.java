@@ -41,28 +41,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/slogin").permitAll()
-                    .antMatchers("/registration").permitAll()
                     .antMatchers("/home").hasAuthority("USER") // ADMIN 권한의 유저만 /home 에 접근가능
+                    .antMatchers("/**").permitAll()
 //                    .antMatchers("/home").permitAll() // ADMIN 권한의 유저만 /home 에 접근가능
-                    .anyRequest().authenticated()
+//                    .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()
                     .loginPage("/slogin")
-                    .loginProcessingUrl("sloginProc")
+                    .loginProcessingUrl("/sloginProc")
                     .failureUrl("/slogin?error=true")
-//                    .defaultSuccessUrl("/home")
+                    .defaultSuccessUrl("/home")
                     .usernameParameter("loginId")
                     .passwordParameter("password")
-                    .successHandler(new CustomLoginSuccessHandler())
+//                    .successHandler(new CustomLoginSuccessHandler())
                 .and()
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .and()
                 .exceptionHandling()
-                    .accessDeniedPage("/access-denied");
+                    .accessDeniedPage("/exception");
     }
 
     @Override
